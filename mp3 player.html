@@ -1,0 +1,197 @@
+<html>
+	<head>
+		<style type="text/css">
+			.playing{
+				color: green !important;
+				font-weight:bold !important;
+				background-color: #d9e9d9 !important;
+    			border-color: #d9e9d9 !important;
+			}
+
+			.btn-secondary {
+			    color: #fff;
+			    background-color: #6c757d;
+			    border-color: #6c757d;
+			}
+
+			.btn-dark {
+			    color: #6c757d;
+			    font-weight: 400;
+			    background-color: transparent;
+			}
+		
+
+			.btn-dark:hover {
+			    color: #212529;
+			    background-color: #e0e0e0;
+			    border-color: #f8f9fa;
+			}
+
+			.btn {
+			    display: inline-block;
+			    font-weight: 400;
+			    text-align: center;
+			    white-space: nowrap;
+			    vertical-align: middle;
+			    -webkit-user-select: none;
+			    -moz-user-select: none;
+			    -ms-user-select: none;
+			    user-select: none;
+			    border: 1px solid transparent;
+			    padding: .375rem .75rem;
+			    font-size: 1rem;
+			    line-height: 1.5;
+			    border-radius: .25rem;
+			    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+			    cursor: pointer;
+			}
+		</style>
+		<script>
+			index = 0;
+			play_type = "sequential" // or rando
+			play_list = [
+				"Alan Walker, K-391 & Emelie Hollow - Lily (Lyrics)",
+				"Discrete - Never Know feat. Maria Mathea (Official Music Video)",
+				"Ed Sheeran - Galway Girl [Official Video]",
+				"Ed Sheeran - Give Me Love [Official Video]",
+				"Ed Sheeran - Happier (Official Video)",
+				"Ed Sheeran - Lego House [Official Video]",
+				"Ed Sheeran - Perfect (Official Music Video)",
+				"Ed Sheeran - Perfect Symphony (with Andrea Bocelli)",
+				"Ed Sheeran - Photograph (Official Music Video)",
+				"Ed Sheeran - Shape of You [Official Video]",
+				"Ed Sheeran - Thinking Out Loud (x Acoustic Session)",
+				"Erika - 繞 Round And Around (華納 official HD 官方版MV)",
+				"F.I.R. 飛兒樂團 末日青春二部曲 [ 自由之歌 The Freedom Song ] Official Music Video",
+				"G.E.M.倒數 TIK TOKOfficial MV [HD] 鄧紫棋",
+				"G.E.M.岩石裡的花 LOVE FINDS A WAYOfficial MV [HD] 鄧紫棋",
+				"G.E.M.鄧紫棋很久以後 Long AfterMV 電影可不可以你也剛好喜歡我主題曲)",
+				"Jeremy Zucker - comethru (Official Video)",
+				"Justin Bieber - Love Yourself (Official Music Video)",
+				"Maroon 5 - Memories (Official Video)",
+				"Mikey Wax - Do You Believe Me (Lyric Video)",
+				"Mr.ChildrenHANABI Tour2015 REFLECTION Live",
+				"SHIO 郭修彧擋箭牌 AdargaOfficial Music Video (東森戲劇台 韓劇認識的妻子片頭曲",
+				"Sam Franklin - Hypocrite (Official Lyric Video)",
+				"Shawn Mendes - There's Nothing Holdin' Me Back",
+				"The Chainsmokers - Closer (Lyric) ft. Halsey",
+				"Understand",
+				"[Lyrics]Alan Walker - Lily + On my way",
+				"朝5晚9主題曲クリスマスソング聖誕頌歌粉ミルク back number (cover) 中文字幕",
+				"伍佰 Wu Bai&China BlueLast danceOfficial Music Video(HD)",
+				"黃宣 YELLOW一天 Someday電視劇想見你상견니插曲 Official Music Video",
+				"韓紅 ft. 林俊傑 飛雲之下 Under the Cloud 动态歌词 Lyrics",
+				"陳粒 小半 Lyric Video",
+				"顏社Leo王 - 陪妳過假日 feat. 9m88 (Official Music Video)",
+				"9m88 - 最高品質靜悄悄 Airplane Mode ft. Leo王 (Official MV)",
+				"盧巧音 Candy Lo feat. 王力宏 Leehom Wang - 好心分手",
+				"陳綺貞 Cheer Chen魚 The EdgeOfficial Music Video",
+				"謝震廷 Eli Hsieh 走 (Official Lyric Video)",
+				"謝震廷 Eli Hsieh燈光Official Music Video",
+				"謝震廷 Eli Hsieh愛麗絲 1993Official Music Video",
+				"謝震廷 Eli Hsieh濕了分寸Official Music Video",
+				"謝震廷 Eli Hsieh你的行李feat. 徐靖玟Official Music Video",
+				"謝震廷 Eli Hsieh很想很想你(Official Music Video)",
+				"謝震廷 Eli Hsieh最想到達的地方 The Fearless PlaceOfficial Music Video",
+				"蕭敬騰 Jam Hsiao - 全是愛 All About Love (華納official 官方MV)",
+				"莫文蔚 Karen Mok - 慢慢喜歡你",
+				"楊乃文 Naiwen Yang - 未接來電[Official Music Video]",
+				"戴佩妮 Penny Tai - 街角的祝福 Blessing From The Street Corner (官方完整版MV)",
+				"孫盛希 Shi ShiSomeday or One Day電視劇想見你상견니片頭曲 Official Music Video",
+				"陳忻玥 Vicky Chen - 煙幕 (Smokescreen) 彩虹六部曲第一次La Boum Official MV KKTV原創電視劇",
+				"梁文音 Wen Yin Liang 還好 (Official Music Video)",
+				"孫盛希 shi shi恆溫Official Music Video HD (華視偶像劇巷弄裡的那家書店插曲)",
+				"蘇打綠 sodagreen -無眠Official Music Video",
+				"蔡健雅-達爾文官方版MV (Official Music Video)",
+				"邱振哲PikA 太陽 Official Music Video官方MV",
+				"原子邦妮 Astro Bunny 被你遺忘的森林Official Music Video 官方完整版高畫質MV",
+				"原子邦妮 Astro Bunny 現在你好嗎官方歌詞MV (Lyric)",
+				"原子邦妮 Astro Bunny 這樣我就能忘記你了Official Music Video",
+				"我的秘密 MySecret MV - G.E.M. 鄧紫棋",
+				"吳青峰蜂鳥Official MV電視劇我在北京等你主題曲",
+				"草東沒有派對 - 爛泥",
+				"吳青峰太空人 SpacemanOfficial MV",
+				"吳青峰歌頌者Official MV"
+			]
+
+			function clean_playing_class(){
+				var playing_songs = document.getElementsByClassName("playing");
+				for (var i = 0; i < playing_songs.length; i++) {
+				   playing_songs[i].className = playing_songs[i].className.replace("playing", "")
+				}
+			}			
+
+			function change_song(song_idx){
+
+				var audio = document.getElementById('audio');
+				var source = document.getElementById('audioSource');
+				source.src = play_list[song_idx] + ".mp3";
+				document.getElementById("playing_song").innerHTML = play_list[song_idx];
+
+				clean_playing_class();
+				audio.load();
+				document.getElementById("song_"+song_idx).className = document.getElementById("song_"+song_idx).className+" playing"
+			}
+
+			function play_next_song(){
+				index += 1;
+				if(index>=play_list.length)
+					index = 0;
+				change_song(index);
+				audio.play();
+			}
+
+			function play_previous_song(){
+				index -= 1;
+				if(index<0)
+					index = 0;
+				change_song(index);
+				audio.play();
+			}
+
+			function play_song(idx){
+				index = idx;
+				change_song(idx);
+				audio.play();
+			}
+
+			function load_play_list(){
+				play_list_html = document.getElementById("play_list")
+				for(i in play_list){
+					play_list_html.innerHTML += '<button id="song_'+i+'" class="btn btn-dark" style="width: 100%" onclick="play_song('+i+')">'+play_list[i]+'</button>';
+				}
+			}
+
+			window.onload = function(){
+				var audio = document.getElementById('audio');
+				var source = document.getElementById('audioSource');
+
+				audio.onended = function() {
+					play_next_song()
+				};
+				load_play_list()
+				change_song(index);
+			}
+			
+
+		</script>
+	</head>
+
+	<body>
+		<div style="height: 200px; overflow: auto">
+			<h2 id="playing_song"></h2>
+			<audio id="audio" controls="controls" style="width:100%">
+				<source id="audioSource" src="Justin Bieber - Love Yourself (Official Music Video).mp3"></source>
+				Your browser does not support the audio format.
+			</audio><br><br>
+			<button class="btn btn-secondary" onclick="play_previous_song()"><<</button>
+			<button class="btn btn-secondary" onclick="play_next_song()">>></button>
+		</div>
+		<hr>
+		<h2 style="margin:0 auto; text-align: center;"><u>Play List</u></h2>
+
+		<div style="max-height: 500px; overflow: auto" id="play_list">
+			
+		</div>
+	</body>
+</html>
