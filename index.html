@@ -127,7 +127,7 @@
 				var source = document.getElementById('audioSource');
 				source.src = play_list[song_idx] + ".mp3";
 				document.getElementById("playing_song").innerHTML = play_list[song_idx];
-
+				document.title = play_list[song_idx];
 				clean_playing_class();
 				audio.load();
 				document.getElementById("song_"+song_idx).className = document.getElementById("song_"+song_idx).className+" playing"
