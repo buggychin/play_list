@@ -50,7 +50,6 @@
 			index = 0;
 			play_type = "sequential" // or rando
 			play_list = [
-				 'Ed Sheeran - Perfect Symphony (with Andrea Bocelli)',
 				 'Ed Sheeran - Happier (Official Video)',
 				 '原子邦妮 Astro Bunny 現在你好嗎官方歌詞MV (Lyric)',
 				 'Ed Sheeran - Thinking Out Loud (x Acoustic Session)',
@@ -107,6 +106,7 @@
 				 'G.E.M.倒數 TIK TOKOfficial MV [HD] 鄧紫棋',
 				 'Ed Sheeran - Photograph (Official Music Video)',
 				 '吳青峰蜂鳥Official MV電視劇我在北京等你主題曲',
+				 'Ed Sheeran - Perfect Symphony (with Andrea Bocelli)',
 				 '戴佩妮 Penny Tai - 街角的祝福 Blessing From The Street Corner (官方完整版MV)',
 				 'Discrete - Never Know feat. Maria Mathea (Official Music Video)',
 				 'Mr.ChildrenHANABI Tour2015 REFLECTION Live',
@@ -125,7 +125,7 @@
 
 				var audio = document.getElementById('audio');
 				var source = document.getElementById('audioSource');
-				source.src = play_list[song_idx] + ".mp3";
+				source.src = "songs/"+play_list[song_idx] + ".mp3";
 				document.getElementById("playing_song").innerHTML = play_list[song_idx];
 				document.title = play_list[song_idx];
 				clean_playing_class();
