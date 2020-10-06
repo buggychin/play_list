@@ -1,11 +1,23 @@
 <html>
 	<head>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
 		<style type="text/css">
 			.playing{
 				color: green !important;
 				font-weight:bold !important;
 				background-color: #d9e9d9 !important;
     			border-color: #d9e9d9 !important;
+			}
+
+			.btn-sm {
+			    padding: .25rem .5rem;
+			    font-size: .875rem;
+			    line-height: 1.5;
+			    border-radius: .2rem;
+			    margin-bottom: 3px;
 			}
 
 			.btn-secondary {
@@ -19,7 +31,18 @@
 			    font-weight: 400;
 			    background-color: transparent;
 			}
-		
+			
+			.btn-success {
+			    color: #fff;
+			    background-color: #28a745;
+			    border-color: #28a745;
+			}
+
+			.btn-warning {
+			    color: #212529;
+			    background-color: #ffc107;
+			    border-color: #ffc107;
+			}
 
 			.btn-dark:hover {
 			    color: #212529;
@@ -46,10 +69,48 @@
 			    cursor: pointer;
 			}
 		</style>
-		<script>
+		<script type="text/javascript">
+			function GetURLParameter(sParam){
+				var sPageURL = window.location.search.substring(1);
+			    var sURLVariables = sPageURL.split('&');
+			    for (var i = 0; i < sURLVariables.length; i++) {
+			        var sParameterName = sURLVariables[i].split('=');
+			        if (sParameterName[0] == sParam) {
+			            return sParameterName[1];
+			        }
+			    }
+			}
+
+			function setCookie(cname, cvalue, exdays) {
+				var d = new Date();
+				d.setTime(d.getTime() + (exdays*24*60*60*1000));
+				var expires = "expires="+ d.toUTCString();
+
+				console.log(cname + "=" + cvalue + ";" + expires + ";path=/")
+				document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+			}
+
+			function getCookie(cname) {
+				var name = cname + "=";
+				var decodedCookie = decodeURIComponent(document.cookie);
+				var ca = decodedCookie.split(';');
+				for(var i = 0; i <ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0) == ' ') {
+				  c = c.substring(1);
+				}
+				if (c.indexOf(name) == 0) {
+				  return c.substring(name.length, c.length);
+				}
+				}
+				return "";
+			}
+
+		</script>
+		<script type="text/javascript">
 			index = 0;
 			play_type = "sequential" // or rando
-			play_list = [
+			songs_list = [
 				'Ed Sheeran - Galway Girl [Official Video]',
 				'Ed Sheeran - Thinking Out Loud (x Acoustic Session)',
 				'韓紅 ft. 林俊傑 飛雲之下 Under the Cloud 动态歌词 Lyrics',
@@ -188,6 +249,14 @@
 				'Jay Chou 周杰倫止戰之殤 Wounds of War-Official Music Video'
 			]
 
+			playlist_name = GetURLParameter("playlist")
+			if(playlist_name!=undefined && getCookie("playlist-"+playlist_name)!=""){
+				play_list = JSON.parse(getCookie("playlist-"+playlist_name))
+			}
+			else{
+				play_list = songs_list.slice()
+			}
+
 			function clean_playing_class(){
 				var playing_songs = document.getElementsByClassName("playing");
 				for (var i = 0; i < playing_songs.length; i++) {
@@ -196,7 +265,6 @@
 			}			
 
 			function change_song(song_idx){
-
 				var audio = document.getElementById('audio');
 				var source = document.getElementById('audioSource');
 				source.src = "songs/"+play_list[song_idx] + ".mp3";
@@ -231,9 +299,57 @@
 
 			function load_play_list(){
 				play_list_html = document.getElementById("play_list")
+				play_list_html.innerHTML = "";
 				for(i in play_list){
 					play_list_html.innerHTML += '<button id="song_'+i+'" class="btn btn-dark" style="width: 100%" onclick="play_song('+i+')">'+play_list[i]+'</button>';
 				}
+			}
+
+			function load_select_list(){
+				non_selected_list_html = document.getElementById("non-selected-songs-list")
+				selected_list_html = document.getElementById("selected-songs-list")
+				for(j in songs_list){
+					if(play_list.includes(songs_list[j])){
+						hide_non_selected = "display:none;"
+						hide_selected = ""
+					}
+					else{
+						hide_non_selected = ""
+						hide_selected = "display:none;"
+					}
+
+					non_selected_list_html.innerHTML += '<button class="btn btn-success btn-sm" style="width: 100%;'+hide_non_selected+'" onclick="add_song('+j+')" id="non-selected-'+j+'">'+songs_list[j]+'</button>';
+
+					selected_list_html.innerHTML += '<div id="selected-'+j+'" style="'+hide_selected+'"> <button class="btn btn-warning btn-sm" style="width: 10%" onclick="remove_song('+j+')">移除</button>'+'<span style="width: 90%">'+songs_list[j]+'</span></div>'
+				}
+			}
+
+			function add_song(i){
+				var song = songs_list[i]
+				if(!play_list.includes(song)){
+					$("#selected-"+i).show();
+					$("#non-selected-"+i).hide();
+					play_list.push(song)
+				}
+				console.log(play_list.length)
+			}
+			function remove_song(i){
+				var song = songs_list[i]
+				console.log(play_list.includes(song), song, songs_list.length)
+				if(play_list.includes(song)){
+					$("#selected-"+i).hide();
+					$("#non-selected-"+i).show();
+					var index = play_list.indexOf(song);
+					play_list.splice(index, 1);
+				}
+				console.log(play_list.length)
+			}
+
+
+			function save(){
+				setCookie("playlist-"+playlist_name, JSON.stringify(play_list), 100000);
+				alert("saved")
+				// location.reload();
 			}
 
 			window.onload = function(){
@@ -243,8 +359,10 @@
 				audio.onended = function() {
 					play_next_song()
 				};
-				load_play_list()
+				load_play_list();
 				change_song(index);
+
+				load_select_list();
 			}
 			
 
@@ -266,6 +384,29 @@
 
 		<div style="max-height: 500px; overflow: auto" id="play_list">
 			
+		</div>
+
+		<div style="width: 100%; height: 100%; background-color: rgb(0,0,0,0.5); z-index: 100; position: absolute; top: 0; left: 0; margin: 0;">
+			<div style="width: 90%; height: 90%; top: 5%; left: 5%; background-color: white; z-index: 101; position: absolute;">
+				<div style="width: 48%; height: 88%; top: 1%; left: 1%; background-color: white; z-index: 101; position: absolute; overflow: auto;" >
+					<h3>新增到歌單：</h3>
+					<div id="non-selected-songs-list"></div>
+
+				</div>
+
+				<div style="width: 48%; height: 88%; top: 1%; left: 51%; background-color: white; z-index: 101; position: absolute; overflow: auto;">
+					<h3>已選歌曲：</h3>
+					<div id="selected-songs-list"></div>
+
+				</div>
+
+				<div style="top: 90%; width: 98%; left: 1%; z-index: 101; position: absolute; overflow: auto;">
+					<hr>
+					<input type="button" class="btn btn-success" value="save" onclick="save()">
+					<input type="button" class="btn btn-warning" value="cancel" onclick="alert('canceled')">
+				</div>
+				
+			</div>
 		</div>
 	</body>
 </html>
